@@ -18,3 +18,4 @@ Route::get('/matka-game-plays/{email}', [UserActionController::class, 'matkaPlay
 Route::get('/thai-game-plays/{email}', [UserActionController::class, 'thaiPlays']);
 
 Route::post('/plays/update-number', [UserActionController::class, 'updateNumber'])->name('plays.updateNumber');
+Route::post('/thai/plays/update-number', [UserActionController::class, 'updateThaiNumber'])->name('plays.thai.updateNumber');

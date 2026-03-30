@@ -1,4 +1,5 @@
 @extends('layouts')
+@section('title', 'Thai play history')
 @section('content')
 <h2 class="mb-4">Play List</h2>
 
@@ -9,10 +10,9 @@
                 <tr>
                     <th>#</th>
                     <th>Category</th>
-                    <th>Type</th>
                     <th>Number</th>
-                    <th>Direct </th>
-                    <th>Ramble </th>
+                    <th>Direct Amount </th>
+                    <th>Ramble Amount </th>
                     <th>Status</th>
                     <th>Created At</th>
                     <th>Updated At</th>
@@ -22,8 +22,7 @@
                 @foreach ($plays as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->category_id }}</td>
-                    <td>{{ $item->type_id }}</td>
+                    <td>{{ $item->category?->name }}</td>
                     <td>
                         <input type="text" 
                         value="{{ $item->number }}" 
@@ -60,7 +59,7 @@ $(document).ready(function() {
         var inputField = $(this);
 
         $.ajax({
-            url: "{{ route('plays.updateNumber') }}",
+            url: "{{ route('plays.thai.updateNumber') }}",
             method: "POST",
             data: {
                 _token: "{{ csrf_token() }}",

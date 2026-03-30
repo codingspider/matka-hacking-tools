@@ -1,4 +1,5 @@
 @extends('layouts')
+@section('title', 'Matka play history')
 @section('content')
 <h2 class="mb-4">Play List</h2>
 
@@ -21,8 +22,11 @@
                 @foreach ($plays as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->category }}</td>
-                    <td>{{ $item->game_time_id }}</td>
+                    <td>{{ $item->matkaCategory?->name }}</td>
+                    <td>
+                        {{ $item->gameTime?->bazar?->name ?? 'N/A' }} 
+                        {{ $item->gameTime?->status == 0 ? 'open' : 'close' }}
+                    </td>
                     <td>
                         <input type="text" 
                         value="{{ $item->number }}" 
@@ -31,7 +35,7 @@
                         data-original="{{ $item->number }}">
                     </td>
                     <td>{{ $item->point }}</td>
-                    <td>{{ $item->status }}</td>
+                    <td>{{ $item->status == 0 ? 'active' : '' }}</td>
                     <td>{{ $item->created_at }}</td>
                     <td>{{ $item->updated_at }}</td>
                 </tr>

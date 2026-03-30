@@ -16,10 +16,11 @@ class UserActionController extends Controller
             $user = User::where('email', $email)->firstOrFail();
 
             // Get the user's pending game plays
-            $plays = GamePlay::where('user_id', $user->id)
-                            ->where('status', 0)
-                            ->orderBy('id', 'desc')
-                            ->get();
+            $plays = GamePlay::with(['matkaCategory', 'gameTime.bazar'])
+            ->where('user_id', $user->id)
+            ->where('status', 0)
+            ->orderBy('id', 'desc')
+            ->get();
 
             // Return view with data
             return view('matka_plays', compact('plays', 'user'));
@@ -37,7 +38,7 @@ class UserActionController extends Controller
             $user = User::where('email', $email)->firstOrFail();
 
             // Get the user's pending game plays
-            $plays = ThaiGamePlay::where('user_id', $user->id)
+            $plays = ThaiGamePlay::with('category')->where('user_id', $user->id)
                             ->where('status', 0)
                             ->orderBy('id', 'desc')
                             ->get();
@@ -56,6 +57,23 @@ class UserActionController extends Controller
     {
         try {
             $play = GamePlay::findOrFail($request->id);
+
+            // Disable timestamps temporarily
+            $play->timestamps = false;
+            $play->number = $request->number;
+            $play->save();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            \Log::error('Update Number Error: '.$e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Update failed'], 500);
+        }
+    }
+
+    public function updateThaiNumber(Request $request)
+    {
+        try {
+            $play = ThaiGamePlay::findOrFail($request->id);
 
             // Disable timestamps temporarily
             $play->timestamps = false;
